@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Platforms>AnyCPU;x64</Platforms>
+		<Version>8.0.1</Version>
+		<AssemblyVersion>8.0.1</AssemblyVersion>
+		<FileVersion>8.0.1</FileVersion>
+		<PackageId>WealthLab.TASC</PackageId>
+		<Authors>Quantacula, LLC</Authors>
+		<Company>Quantacula, LLC</Company>
+		<Product>WealthLab.TASC</Product>
+		<PackageProjectUrl>https://www.wealth-lab.com</PackageProjectUrl>
+		<Configurations>Debug;Release</Configurations>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="WealthLab.Core">
+      <HintPath>..\..\..\..\..\..\Program Files\Quantacula, LLC\WealthLab 8\WealthLab.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
