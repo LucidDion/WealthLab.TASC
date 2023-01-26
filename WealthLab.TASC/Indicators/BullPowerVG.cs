@@ -12,7 +12,7 @@ namespace WealthLab.TASC
         }
 
         //for code based construction
-        public BullPowerVG(BarHistory bars, int period)
+        public BullPowerVG(BarHistory bars)
             : base()
         {
             Parameters[0].Value = bars;
@@ -21,12 +21,12 @@ namespace WealthLab.TASC
         }
         
         //static method
-        public static BullPowerVG Series(BarHistory source, int period)
+        public static BullPowerVG Series(BarHistory source)
         {
-            string key = CacheKey("BullPowerVG", period);
+            string key = CacheKey("BullPowerVG");
             if (source.Cache.ContainsKey(key))
                 return (BullPowerVG)source.Cache[key];
-            BullPowerVG bpvg = new BullPowerVG(source, period);
+            BullPowerVG bpvg = new BullPowerVG(source);
             source.Cache[key] = bpvg;
             return bpvg;
         }
@@ -65,8 +65,6 @@ namespace WealthLab.TASC
                 else /* symmetrical doji, going down or no change */ Values[bar] = r2;
             }
         }
-
-
 
         public override string Name => "BullPowerVG";
 

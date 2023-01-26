@@ -57,7 +57,8 @@ namespace WealthLab.TASC
             p.Choices.Add("Percent");
             p.Choices.Add("ATR");
             p.Choices.Add("Combined");
-            p.TypeName = "SVEHLZZperc_Type";
+            p.Choices.Add("Point");
+            p.TypeName = "SVEHLZZpercType";
         }
 
         //populate

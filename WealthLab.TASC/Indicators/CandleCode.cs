@@ -16,7 +16,7 @@ namespace WealthLab.TASC
             : base()
         {
             Parameters[0].Value = bars;
-
+            Parameters[1].Value = period;
             Populate();
         }
 
@@ -35,6 +35,7 @@ namespace WealthLab.TASC
         protected override void GenerateParameters()
         {
             AddParameter("Source", ParameterType.BarHistory, null);
+            AddParameter("Period", ParameterType.Int32, 20);
         }
 
 
@@ -47,14 +48,15 @@ namespace WealthLab.TASC
             if (ds.Count == 0)
                 return;
 
+            Int32 period = Parameters[1].AsInt;
 
             //Assign first bar that contains indicator data
-            var FirstValidValue = 20;
+            var FirstValidValue = period;
             if (FirstValidValue > ds.Count) FirstValidValue = ds.Count;
 
-            var US = new TimeSeries(DateTimes); 
-            var BS = new TimeSeries(DateTimes);
-            var LS = new TimeSeries(DateTimes);
+            var US = new TimeSeries(DateTimes, 0); 
+            var BS = new TimeSeries(DateTimes, 0);
+            var LS = new TimeSeries(DateTimes, 0);
 
             //Build aux series
             for (int bar = 0; bar < ds.Count; bar++)
@@ -71,12 +73,12 @@ namespace WealthLab.TASC
                     LS[bar] = ds.Open [bar] - ds.Low  [bar];
                 }
 
-            var U_Upper = new BBUpper(US, 20, 0.5);
-            var U_Lower = new BBLower(US, 20, 0.5);
-            var B_Upper = new BBUpper(BS, 20, 0.5);
-            var B_Lower = new BBLower(BS, 20, 0.5);
-            var L_Upper = new BBUpper(LS, 20, 0.5);
-            var L_Lower = new BBLower(LS, 20, 0.5);
+            var U_Upper = BBUpper.Series(US, period, 0.5);
+            var U_Lower = BBLower.Series(US, period, 0.5);
+            var B_Upper = BBUpper.Series(BS, period, 0.5);
+            var B_Lower = BBLower.Series(BS, period, 0.5);
+            var L_Upper = BBUpper.Series(LS, period, 0.5);
+            var L_Lower = BBLower.Series(LS, period, 0.5);
 
             //Initialize start of series with zeroes
             //for (int bar = 0; bar < FirstValidValue; bar++)

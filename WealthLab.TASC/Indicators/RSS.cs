@@ -12,22 +12,25 @@ namespace WealthLab.TASC
         }
 
         //for code based construction
-        public RSS(TimeSeries source, Int32 period)
+        public RSS(TimeSeries source, int fastSMAPeriod, int slowSMAPeriod, int rsiPeriod, int smoothPeriod)
             : base()
         {
             Parameters[0].Value = source;
-            Parameters[1].Value = period;
+            Parameters[1].Value = fastSMAPeriod;
+            Parameters[2].Value = slowSMAPeriod;
+            Parameters[3].Value = rsiPeriod;
+            Parameters[4].Value = smoothPeriod;
 
             Populate();
         }
 
         //static method
-        public static RSS Series(TimeSeries source, int period)
+        public static RSS Series(TimeSeries source, int fastSMAPeriod, int slowSMAPeriod, int rsiPeriod, int smoothPeriod)
         {
-            string key = CacheKey("RSS", period);
+            string key = CacheKey("RSS", fastSMAPeriod, slowSMAPeriod, rsiPeriod, smoothPeriod);
             if (source.Cache.ContainsKey(key))
                 return (RSS)source.Cache[key];
-            RSS rss = new RSS(source, period);
+            RSS rss = new RSS(source, fastSMAPeriod, slowSMAPeriod, rsiPeriod, smoothPeriod);
             source.Cache[key] = rss;
             return rss;
         }
@@ -59,9 +62,9 @@ namespace WealthLab.TASC
                 return;
 
             //Remember parameters 
-            var spread = new SMA(ds, fastsmaperiod) - new SMA(ds, slowsmaperiod);
-            var relstr = new RSI(spread, rsiperiod);
-            var smooth = new SMA(relstr, smoothperiod);
+            var spread = SMA.Series(ds, fastsmaperiod) - SMA.Series(ds, slowsmaperiod);
+            var relstr = RSI.Series(spread, rsiperiod);
+            var smooth = SMA.Series(relstr, smoothperiod);
 
             //Assign first bar that contains indicator data
             var FirstValidValue = (fastsmaperiod > slowsmaperiod ? fastsmaperiod : slowsmaperiod) + rsiperiod + smoothperiod;

@@ -12,22 +12,23 @@ namespace WealthLab.TASC
         }
 
         //for code based construction
-        public UCI(TimeSeries source, Int32 period)
+        public UCI(TimeSeries source, Int32 period, Int32 volaPperiod)
             : base()
         {
             Parameters[0].Value = source;
             Parameters[1].Value = period;
+            Parameters[2].Value = volaPperiod;
 
             Populate();
         }
 
         //static method
-        public static UCI Series(TimeSeries source, int period)
+        public static UCI Series(TimeSeries source, int period, int volaPeriod)
         {
-            string key = CacheKey("UCI", period);
+            string key = CacheKey("UCI", period, volaPeriod);
             if (source.Cache.ContainsKey(key))
                 return (UCI)source.Cache[key];
-            UCI u = new UCI(source, period);
+            UCI u = new UCI(source, period, volaPeriod);
             source.Cache[key] = u;
             return u;
         }

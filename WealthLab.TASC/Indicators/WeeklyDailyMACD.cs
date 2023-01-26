@@ -55,12 +55,9 @@ namespace WealthLab.TASC
                 return;
 
             var FirstValidValue = Math.Max(WeeklyLength1, WeeklyLength2);
-            var WM = new EMA(ds, WeeklyLength1) - new EMA(ds, WeeklyLength2);
+            var WM = EMA.Series(ds, WeeklyLength1) - EMA.Series(ds, WeeklyLength2);
 
-            for (int bar = 0; bar < ds.Count; bar++)
-            {
-                Values[bar] = WM[bar];
-            }
+            Values = WM.Values;
         }
 
         public override string Name => "WeeklyMACD";

@@ -12,7 +12,7 @@ namespace WealthLab.TASC
         }
 
         //for code based construction
-        public BearPowerVG(BarHistory bars, int period)
+        public BearPowerVG(BarHistory bars)
             : base()
         {
             Parameters[0].Value = bars;
@@ -21,12 +21,12 @@ namespace WealthLab.TASC
         }
 
         //static method
-        public static BearPowerVG Series(BarHistory source, int period)
+        public static BearPowerVG Series(BarHistory source)
         {
-            string key = CacheKey("BearPowerVG", period);
+            string key = CacheKey("BearPowerVG");
             if (source.Cache.ContainsKey(key))
                 return (BearPowerVG)source.Cache[key];
-            BearPowerVG bpvg = new BearPowerVG(source, period);
+            BearPowerVG bpvg = new BearPowerVG(source);
             source.Cache[key] = bpvg;
             return bpvg;
         }

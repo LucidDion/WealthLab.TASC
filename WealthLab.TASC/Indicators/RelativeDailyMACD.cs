@@ -1,5 +1,6 @@
 ﻿using WealthLab.Core;
 using WealthLab.Indicators;
+using System.Linq;
 
 namespace WealthLab.TASC
 {
@@ -11,12 +12,14 @@ namespace WealthLab.TASC
         }
 
         //for code based construction
-        public RelativeDailyMACD(TimeSeries source, Int32 period1, Int32 period2)
+        public RelativeDailyMACD(TimeSeries source, Int32 dailyLength1, Int32 dailyLength2, Int32 weeklyLength1, Int32 weeklyLength2)
             : base()
         {
             Parameters[0].Value = source;
-            Parameters[1].Value = period1;
-            Parameters[2].Value = period2;
+            Parameters[1].Value = dailyLength1;
+            Parameters[2].Value = dailyLength2;
+            Parameters[3].Value = weeklyLength1;
+            Parameters[4].Value = weeklyLength2;
 
             Populate();
         }
@@ -42,13 +45,13 @@ namespace WealthLab.TASC
 
             DateTimes = ds.DateTimes;
 
-            int period = Math.Max(WeeklyLength1, WeeklyLength2);
+            int period = new List<int>(){ DailyLength1, DailyLength2, WeeklyLength1, WeeklyLength2 }.Max();
             if (period <= 0 || ds.Count == 0)
                 return;
 
             var FirstValidValue = Math.Max(Math.Max(DailyLength1, DailyLength2), Math.Max(WeeklyLength1, WeeklyLength2));
-            var WM = new EMA(ds, WeeklyLength1) - new EMA(ds, WeeklyLength2);
-            var DM = new EMA(ds, DailyLength1) - new EMA(ds, DailyLength2);
+            var WM = EMA.Series(ds, WeeklyLength1) - EMA.Series(ds, WeeklyLength2);
+            var DM = EMA.Series(ds, DailyLength1) - EMA.Series(ds, DailyLength2);
             var RelativeDailyMACD = WM + DM;
 
             for (int bar = 0; bar < ds.Count; bar++)
